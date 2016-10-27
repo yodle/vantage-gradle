@@ -1,6 +1,6 @@
-# Vantage Gradle Pluguin
+# Vantage Gradle Plugin
 
-This plugin adds support for generating Vantage 'version' files in json format and publishing them to a [Vantage](https://github.com/yodle/vantage) server.  It also enables printing warnings about dependencies with known issues, and optionally gating the build if those issues are severe enough.
+This plugin adds support for generating Vantage 'version' files in json format and publishing them to a [Vantage](https://github.com/yodle/vantage) server.  It also enables printing warnings about dependencies with known issues, and optionally gating the build if those issues are severe enough.  It is avaiable through Maven Central as `com.yodle:vantage-gradle:<version>`.
 
 #Tasks and Configuration Options
 
