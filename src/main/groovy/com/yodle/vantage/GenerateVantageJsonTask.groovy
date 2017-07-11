@@ -34,6 +34,15 @@ class GenerateVantageJsonTask extends DefaultTask implements ReportProvider
 {
   public static final String DEFAULT_PROFILE = "default"
   public static final String LATEST_VERSION = "latest"
+  def doNotResolveConfigurations =
+          ['apiElements',
+           'runtimeElements',
+           'runtimeOnly',
+           'testRuntimeOnly',
+           'implementation',
+           'testImplementation',
+           'testCaseImplementation',
+           'testCaseRuntimeOnly']
 
   private Report report;
   ReportPrinter reportPrinter;
@@ -47,6 +56,8 @@ class GenerateVantageJsonTask extends DefaultTask implements ReportProvider
   public void generate()
   {
     def vantage = project.extensions.getByType(VantageExtension)
+
+    project.configurations.removeAll{it.name in doNotResolveConfigurations}
 
     def resolvedDependencies = project.configurations
             .inject([], aggregateComponentProfileTuples)
