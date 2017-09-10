@@ -1,3 +1,11 @@
+1.6.1 / 2017-07-17
+=================
+vantageGenerate task does not actually remove unresolvable configurations from the project configurations 
+
+1.6.0 / 2017-07-11
+=================
+vantageGenerate task no longer attempts to resolve unresolvable dependencies.  See https://discuss.gradle.org/t/3-4-rc-1-3-3-resolving-configurations-may-be-disallowed-and-throw-illegalstateexception/21470
+
 1.5.0 / 2016-10-11
 =================
 vantageCheck and vantageGenerate no longer require versions to be set.  (vantagePublish still requires it)

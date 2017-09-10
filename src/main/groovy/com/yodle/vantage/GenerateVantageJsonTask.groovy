@@ -34,15 +34,6 @@ class GenerateVantageJsonTask extends DefaultTask implements ReportProvider
 {
   public static final String DEFAULT_PROFILE = "default"
   public static final String LATEST_VERSION = "latest"
-  def doNotResolveConfigurations =
-          ['apiElements',
-           'runtimeElements',
-           'runtimeOnly',
-           'testRuntimeOnly',
-           'implementation',
-           'testImplementation',
-           'testCaseImplementation',
-           'testCaseRuntimeOnly']
 
   private Report report;
   ReportPrinter reportPrinter;
@@ -57,9 +48,8 @@ class GenerateVantageJsonTask extends DefaultTask implements ReportProvider
   {
     def vantage = project.extensions.getByType(VantageExtension)
 
-    project.configurations.removeAll{it.name in doNotResolveConfigurations}
-
     def resolvedDependencies = project.configurations
+            .findAll(isResolvable)
             .inject([], aggregateComponentProfileTuples)
             .inject(new HashMap<Version, Set<String>>(), groupProfilesByVersion(vantage.includeProjectDependencyVersions))
             .collect { new Dependency(it.key, it.value) }
@@ -76,6 +66,12 @@ class GenerateVantageJsonTask extends DefaultTask implements ReportProvider
     report.requestedDependencies.addAll(requestedDependencies)
 
     reportPrinter.printReport(project.buildDir, report)
+  }
+
+  private static Closure<Boolean> isResolvable = {
+    //if isCanBeResolved does not exist in the current gradle version, it must be a version of gradle without
+    //unresolvable versions.  See https://discuss.gradle.org/t/3-4-rc-1-3-3-resolving-configurations-may-be-disallowed-and-throw-illegalstateexception/21470
+    !it.metaClass.respondsTo(it, 'isCanBeResolved') || it.isCanBeResolved()
   }
 
   Closure<List<Tuple2<String, ResolvedComponentResult>>> aggregateComponentProfileTuples = {
